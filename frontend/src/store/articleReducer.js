@@ -17,6 +17,31 @@ export const addArticle = (article) => {
   };
 };
 
+
+export const fetchArticles = () => async dispatch => {
+  const response = await fetch('/api/articles')
+  const articles = await response.json()
+
+  dispatch(loadArticles(articles))
+
+}
+
+export const writeArticle = (article) => async dispatch => {
+  const response = await fetch('/api/articles', {
+    method: 'POST',
+    headers: {
+      "Content-Type": 'application/json'
+    },
+    body: JSON.stringify(article)
+  })
+
+  const data = await response.json()
+
+  if(response.ok){
+    dispatch(addArticle(data))
+  }
+}
+
 const initialState = { entries: [], isLoading: true };
 
 const articleReducer = (state = initialState, action) => {
